@@ -9,10 +9,17 @@ import ResultsModal from './components/ResultsModal'
 import useLoginStore from './store/loginStore';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
+import getUsers from './api/getUsers';
+import { useEffect } from 'react';
 
 function App() {
   const { isFormSubmitted, isOnPollsPage, isOnHomePage } = useStore();
   const { isOnLoginPage, isLoggedIn } = useLoginStore();
+
+  // useEffect(() => {
+  //   getUsers();
+  // }, [])
+
 
   return (
     <div className={classes.appContainer}>

@@ -1,14 +1,14 @@
 import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './RegisterPage.module.css';
-import useLocalStorage from '../util/localStorageHook';
+import { useState } from "react";
 
 const RegisterPage = props => {
 
     const { registerHandler, isLoggedIn } = useLoginStore();
-    const [enteredUsername, setEnteredUsername] = useLocalStorage('enteredUsername', '');
-    const [enteredPassword, setEnteredPassword] = useLocalStorage('enteredPassword', '');
-    const [enteredRepass, setEnteredRepass] = useLocalStorage('enteredRepass', '');
+    const [enteredUsername, setEnteredUsername] = useState('');
+    const [enteredPassword, setEnteredPassword] = useState('');
+    const [enteredRepass, setEnteredRepass] = useState('');
 
     const getUsername = (event) => {
         setEnteredUsername(event.target.value);

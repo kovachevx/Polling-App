@@ -6,28 +6,38 @@ const AppContext = createContext();
 
 export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
-    const [isOnLoginPage, setIsOnLoginPage] = useLocalStorage('isOnLoginPage', false);
+    const [isOnLoginPage, setIsOnLoginPage] = useState(false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
+    const [users, setUsers] = useState([]);
 
-    const usersList = [
-        { id: 0, username: 'vasko', password: '123', },
-        { id: 1, username: 'koceto', password: '123', },
-        { id: 2, username: 'dog', password: '123', }
-    ];
+    async function getUsers() {
+        try {
+            const response = await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json');
+            const data = await response.json();
+            const userData = [];
+            for (let user in data) {
+                userData.push(data[user]);
+            }
+            setUsers(userData);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-    const [users, setUsers] = useLocalStorage('users', usersList);
-
-    const loginHandler = (event, username, password) => {
+    const loginHandler = async (event, username, password) => {
         event.preventDefault();
+
         if (username.trim() === '' || password.trim() === '') {
             return alert('All fields are required');
         }
+
+        getUsers();
 
         let successfulLogin = false;
 
         users.forEach(user => {
             if (user.username === username && user.password === password) {
-                setLoggedUser(user);
+                setLoggedUser({ id: user.id, username: user.username });
                 setIsLoggedIn(true);
                 successfulLogin = true;
             }
@@ -38,15 +48,17 @@ export function LoginStore(props) {
         }
     }
 
-    const registerHandler = (event, username, password, repass) => {
+    const registerHandler = async (event, username, password, repass) => {
         event.preventDefault();
 
         if (username.trim() === '' || password.trim() === '' || repass.trim() === '') {
             return alert('All fields are required');
         }
 
+        getUsers();
+
         let userAlreadyExists = false;
-        console.log(users);
+
         for (let user of users) {
             if (user.username === username) {
                 userAlreadyExists = true;
@@ -67,9 +79,12 @@ export function LoginStore(props) {
             password
         }
 
-        users.push(newUser);
-        setUsers(prevstate => [...prevstate]);
-        setLoggedUser(newUser);
+        await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json', {
+            method: 'POST',
+            body: JSON.stringify(newUser)
+        });
+
+        setLoggedUser({ id: newUser.id, username: newUser.username });
         setIsLoggedIn(true);
     };
 

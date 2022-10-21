@@ -1,6 +1,5 @@
 import { Button } from "reactstrap";
 import useLoginStore from "../store/loginStore";
-import useStore from "../store/pollCreationStore";
 import useVoteStore from "../store/voteStore";
 import classes from './SinglePoll.module.css';
 

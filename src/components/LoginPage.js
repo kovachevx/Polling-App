@@ -1,14 +1,15 @@
 import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './LoginPage.module.css';
-import useLocalStorage from '../util/localStorageHook';
+// import useLocalStorage from '../util/localStorageHook';
+import { useState } from "react";
 import useStore from "../store/pollCreationStore";
 
 const LoginPage = props => {
     const { homePageRedirect } = useStore();
     const { loginHandler, isLoggedIn } = useLoginStore();
-    const [enteredUsername, setEnteredUsername] = useLocalStorage('enteredUsername', '');
-    const [enteredPassword, setEnteredPassword] = useLocalStorage('enteredPassword', '');
+    const [enteredUsername, setEnteredUsername] = useState('');
+    const [enteredPassword, setEnteredPassword] = useState('');
 
     const getUsername = (event) => {
         setEnteredUsername(event.target.value);

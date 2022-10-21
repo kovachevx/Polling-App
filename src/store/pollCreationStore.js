@@ -9,7 +9,7 @@ export function PollCreationStore(props) {
     const { setIsOnLoginPage } = useLoginStore();
 
     const title = useRef('');
-    const [options, setOptions] = useLocalStorage('options', [{
+    const [options, setOptions] = useState([{
         id: Math.random().toString(),
         options:
             [{ id: Math.random().toString(), votes: 0 },
@@ -18,9 +18,9 @@ export function PollCreationStore(props) {
         voters: []
     }]);
 
-    const [isFormSubmitted, setIsFormSubmitted] = useLocalStorage('isFormSubmitted', false);
-    const [isOnPollsPage, setIsOnPollsPage] = useLocalStorage('isOnPollsPage', false);
-    const [isOnHomePage, setIsOnHomePage] = useLocalStorage('isOnHomePage', true);
+    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+    const [isOnPollsPage, setIsOnPollsPage] = useState(false);
+    const [isOnHomePage, setIsOnHomePage] = useState(true);
     const [polls, setPolls] = useLocalStorage('polls', []);
 
     const addOptionHandler = (event) => {
@@ -67,7 +67,7 @@ export function PollCreationStore(props) {
         });
 
         setPolls(previousState => {
-            return [options[0], ...previousState];
+            return [...previousState, options[0]];
         })
 
         setIsFormSubmitted(true);
