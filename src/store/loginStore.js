@@ -9,11 +9,13 @@ export function LoginStore(props) {
     const [isOnLoginPage, setIsOnLoginPage] = useLocalStorage('isOnLoginPage', false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
 
-    const users = [
-        { id: 1, username: 'vasko', password: '123', votedFor: {} },
-        { id: 2, username: 'koceto', password: '123', votedFor: {} },
-        { id: 3, username: 'dog', password: '123', votedFor: {} }
+    const usersList = [
+        { id: 0, username: 'vasko', password: '123', },
+        { id: 1, username: 'koceto', password: '123', },
+        { id: 2, username: 'dog', password: '123', }
     ];
+
+    const [users, setUsers] = useLocalStorage('users', usersList);
 
     const loginHandler = (event, username, password) => {
         event.preventDefault();
@@ -21,20 +23,55 @@ export function LoginStore(props) {
             return alert('All fields are required');
         }
 
-        let successfulLogIn = false;
+        let successfulLogin = false;
 
         users.forEach(user => {
             if (user.username === username && user.password === password) {
                 setLoggedUser(user);
                 setIsLoggedIn(true);
-                successfulLogIn = true;
+                successfulLogin = true;
             }
         });
 
-        if (!successfulLogIn) {
+        if (!successfulLogin) {
             return alert('Invalid credentials!');
         }
     }
+
+    const registerHandler = (event, username, password, repass) => {
+        event.preventDefault();
+
+        if (username.trim() === '' || password.trim() === '' || repass.trim() === '') {
+            return alert('All fields are required');
+        }
+
+        let userAlreadyExists = false;
+        console.log(users);
+        for (let user of users) {
+            if (user.username === username) {
+                userAlreadyExists = true;
+            }
+        }
+
+        if (userAlreadyExists) {
+            return alert(`${username} is already taken, please choose another username!`);
+        }
+
+        if (password !== repass) {
+            return alert('Passwords don\'t match!');
+        }
+
+        const newUser = {
+            id: users.length,
+            username,
+            password
+        }
+
+        users.push(newUser);
+        setUsers(prevstate => [...prevstate]);
+        setLoggedUser(newUser);
+        setIsLoggedIn(true);
+    };
 
     return (
         <AppContext.Provider
@@ -43,6 +80,7 @@ export function LoginStore(props) {
                 isLoggedIn, setIsLoggedIn,
                 isOnLoginPage, setIsOnLoginPage,
                 loggedUser, setLoggedUser,
+                registerHandler
             }}
         >
             {props.children}

@@ -17,7 +17,8 @@ const VoteModal = props => {
                         return (
                             <div key={option.id} className={classes.voteContainer}>
                                 <input className={classes.voteInput} name="role" value={option.text} id={option.id} type='radio' onChange={e => setSelectedOption(e.target.value)} />
-                                <label htmlFor={option.id}>{option.text}</label>
+                                <label htmlFor={option.id}><b>{option.text}</b></label>
+                                <hr/>
                             </div>
                         );
                     })}

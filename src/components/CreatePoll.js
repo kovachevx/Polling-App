@@ -5,13 +5,18 @@ import { Button } from "reactstrap";
 import useLoginStore from '../store/loginStore';
 
 const CreatePoll = props => {
-    const { submitFormHandler, title, options, addOptionHandler, removeOptionHandler, inputChangeHandler } = useStore();
+    const { submitFormHandler, title, options, addOptionHandler, removeOptionHandler, inputChangeHandler, homePageRedirect } = useStore();
     const { isLoggedIn } = useLoginStore();
 
     return (
         <div>
             <h2 className={classes.h2}><i>CREATE POLL</i></h2>
-            {!isLoggedIn && <p>Only logged in users can create polls.</p>}
+            {!isLoggedIn &&
+                <div>
+                    <p>Only logged in users can create polls.</p>
+                    <span>Don't have an account yet? &nbsp;</span>
+                    <Button color="success" onClick={homePageRedirect}>Register</Button>
+                </div>}
             {isLoggedIn && <form onSubmit={submitFormHandler} className={classes.formContainer}>
                 <div className={classes.titleContainer}>
                     <label className={classes.label} htmlFor="title">Poll Title:</label>

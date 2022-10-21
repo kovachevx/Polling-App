@@ -1,19 +1,18 @@
-import logo from './logo.svg';
 import classes from './App.module.css';
 import CreatePoll from './components/CreatePoll';
 import HomePage from './components/HomePage';
 import SubmittedForm from './components/SubmittedForm';
 import useStore from './store/pollCreationStore';
 import PollsPage from './components/PollsPage';
-import { useEffect, useState } from 'react';
 import VoteModal from './components/VoteModal';
 import ResultsModal from './components/ResultsModal'
 import useLoginStore from './store/loginStore';
 import LoginPage from './components/LoginPage';
+import RegisterPage from './components/RegisterPage';
 
 function App() {
   const { isFormSubmitted, isOnPollsPage, isOnHomePage } = useStore();
-  const { isOnLoginPage } = useLoginStore();
+  const { isOnLoginPage, isLoggedIn } = useLoginStore();
 
   return (
     <div className={classes.appContainer}>
@@ -22,6 +21,7 @@ function App() {
       {(isFormSubmitted && !isOnPollsPage) && < SubmittedForm />}
       {(isOnPollsPage && !isOnLoginPage) && <PollsPage />}
       {isOnLoginPage && <LoginPage />}
+      {(isOnHomePage && !isLoggedIn) && < RegisterPage />}
       <VoteModal />
       <ResultsModal />
     </div >

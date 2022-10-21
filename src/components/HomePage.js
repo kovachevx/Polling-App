@@ -40,7 +40,6 @@ const HomePage = props => {
                 <Button className={classes.btn} color='primary' onClick={createAnotherPollHandler}>Create Poll</Button>
                 <div>
                     <Button className={classes.btn} color={!isLoggedIn ? 'warning' : 'danger'} onClick={!isLoggedIn ? visitLoginPageHandler : logoutHandler}>{isLoggedIn ? 'Logout' : 'Login'}</Button>
-                    {/* {!isLoggedIn && <Button className={classes.btn} color='success'>Register</Button>} */}
                 </div>
             </div>
 
