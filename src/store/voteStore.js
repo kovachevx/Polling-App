@@ -9,8 +9,8 @@ const AppContext = createContext();
 export function VoteStore(props) {
     const { polls, setPolls } = useStore();
     const [selectedOption, setSelectedOption] = useLocalStorage('selectedOption', '');
-    const [voteModalProps, setVoteModalProps] = useState('voteModalProps', { isOpen: false });
-    const [resultModalProps, setResultModalProps] = useState('resultModalProps', { isOpen: false });
+    const [voteModalProps, setVoteModalProps] = useLocalStorage('voteModalProps', { isOpen: false });
+    const [resultModalProps, setResultModalProps] = useLocalStorage('resultModalProps', { isOpen: false });
 
     const { loggedUser } = useLoginStore();
     const toggleVoteModal = () => setVoteModalProps({ ...voteModalProps, isOpen: !voteModalProps.isOpen });
@@ -43,8 +43,6 @@ export function VoteStore(props) {
     }
 
     const viewResultsHandler = (event) => {
-        console.log(polls, 'post update');
-
         const clickedPoll = polls.find(poll => poll.id === event.target.id);
         setResultModalProps({ ...clickedPoll, isOpen: true });
     };

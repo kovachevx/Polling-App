@@ -2,7 +2,6 @@
     border: 1px solid rgba(0, 0, 0, 0.4);
     padding: 20px;
     background-image: linear-gradient(to left, brown, orange);
-    /* background-image: linear-gradient(to left, #F3FFBD, #70C1B3); */
     margin: 10px 0px;
     display: flex;
     flex-direction: column;
@@ -12,11 +11,11 @@
 }
 
 label {
-    width: 100px
+    width: 150px
 }
 
 .d-flex {
-    margin: 10px !important;
+    margin: px;
 }
 
 .h2 {

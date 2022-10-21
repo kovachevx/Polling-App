@@ -22,9 +22,6 @@
     margin: 10px;
     padding: 10px;
     background-image: linear-gradient(to left, brown, orange);
-
-    /* background-image: linear-gradient(to right, #F3FFBD, #70C1B3); */
-
 }
 
 .formContainer {
@@ -40,7 +37,6 @@
     border-radius: 10px;
     padding: 20px;
     background-image: linear-gradient(to left, brown, orange);
-    /* background-image: linear-gradient(to left, #F3FFBD, #70C1B3); */
 }
 
 .inputsContainer:hover {

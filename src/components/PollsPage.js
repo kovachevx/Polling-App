@@ -8,8 +8,6 @@ const PollsPage = props => {
     const { polls, homePageRedirect } = useStore();
     const { isLoggedIn } = useLoginStore();
 
-    console.log(polls)
-
     return (
         <div className={classes.pollsContainer}>
             <h2 className={classes.h2}><i>Le Polls Paget</i></h2>

@@ -29,16 +29,16 @@ const RegisterPage = props => {
                 < form onSubmit={(e) => registerHandler(e, enteredUsername, enteredPassword, enteredRepass)} className={classes.formContainer}>
                     <div className={classes.inputsContainer}>
                         <div className='d-flex justify-content-center'>
-                            <label htmlFor="username">Enter username:&nbsp;</label>
-                            <input type="text" id="username" onChange={getUsername} required />
+                            <label htmlFor="registerUsername">Enter username:&nbsp;</label>
+                            <input type="text" id="registerUsername" onChange={getUsername} required />
                         </div>
                         <div className='d-flex justify-content-center'>
-                            <label htmlFor="password">Enter password:&nbsp;</label>
-                            <input type="password" id="password" onChange={getPassword} required />
+                            <label htmlFor="registerPassword">Enter password:&nbsp;</label>
+                            <input type="password" id="registerPassword" onChange={getPassword} required />
                         </div>
                         <div className='d-flex justify-content-center'>
-                            <label htmlFor="password">Repeat password:&nbsp;</label>
-                            <input type="password" id="password" onChange={getRepass} required />
+                            <label htmlFor="registerRepass">Repeat password:&nbsp;</label>
+                            <input type="password" id="registerRepass" onChange={getRepass} required />
                         </div>
                         <p className={classes.para}>Already have an account? Simply log in.</p>
                         <div className='d-flex justify-content-center'>
