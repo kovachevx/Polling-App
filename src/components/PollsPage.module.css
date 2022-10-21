@@ -1,0 +1,16 @@
+.pollsContainer {
+    border: 1px solid #F3FFBD;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 15px;
+}
+
+.p, .h2 {
+    margin: 10px;
+}
+
+.h2 {
+    text-decoration: underline;
+}
