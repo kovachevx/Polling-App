@@ -67,7 +67,7 @@ export function PollCreationStore(props) {
         });
 
         setPolls(previousState => {
-            return [...previousState, options[0]];
+            return [options[0], ...previousState];
         })
 
         setIsFormSubmitted(true);
