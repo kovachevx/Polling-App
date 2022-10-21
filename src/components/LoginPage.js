@@ -1,11 +1,11 @@
 import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './LoginPage.module.css';
-import { useState } from "react";
 import useLocalStorage from '../util/localStorageHook';
+import useStore from "../store/pollCreationStore";
 
 const LoginPage = props => {
-
+    const { homePageRedirect } = useStore();
     const { loginHandler, isLoggedIn } = useLoginStore();
     const [enteredUsername, setEnteredUsername] = useLocalStorage('enteredUsername', '');
     const [enteredPassword, setEnteredPassword] = useLocalStorage('enteredPassword', '');
@@ -32,10 +32,13 @@ const LoginPage = props => {
                         <input type="password" id="password" onChange={getPassword} required />
                     </div>
                     <div className='d-flex justify-content-center'>
-                        <Button className={classes.btn} color='success'>Log in</Button>
+                        <Button className={classes.btn} color='primary'>Log in</Button>
                     </div>
                 </div>
-
+                <div>
+                    <span>Don't have an account yet? &nbsp;</span>
+                    <Button color="success" onClick={homePageRedirect}>Register</Button>
+                </div>
             </form>}
             {isLoggedIn &&
                 <div>

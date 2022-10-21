@@ -29,7 +29,7 @@ export function VoteStore(props) {
         const currentPoll = polls.find(p => p.id === poll.id);
         currentPoll.totalVotes++;
 
-        poll.voters.push(loggedUser.id)
+        poll.voters.push(loggedUser.username)
 
         setPolls(previousState => {
             return [...previousState];

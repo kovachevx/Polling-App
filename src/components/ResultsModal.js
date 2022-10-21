@@ -18,6 +18,10 @@ const ResultsModal = props => {
                 <div className={classes.totalVotes}>
                     Total votes: {resultModalProps.totalVotes}
                 </div>
+                {resultModalProps.totalVotes > 0 &&
+                    <div className={classes.voters}>
+                        Voters: {resultModalProps.voters.map((voter, index) => <span key={index}>{resultModalProps.voters.length === index + 1 ? voter : `${voter}, `}</span>)}
+                    </div>}
             </ModalHeader>
             <ModalBody>
                 <div>
@@ -25,7 +29,7 @@ const ResultsModal = props => {
                         return (
                             <div key={option.id} className={classes.voteContainer}>
                                 <div className={classes.progressBarContainer}>
-                                <div  className={classes.textContainer}><b>{option.text}</b></div>
+                                    <div className={classes.textContainer}><b>{option.text}</b></div>
                                     <ProgressBar value={((option.votes / resultModalProps.totalVotes) * 100).toFixed(2)}>
                                         {((option.votes / resultModalProps.totalVotes) * 100).toFixed(2)}%
                                     </ProgressBar>

@@ -7,7 +7,6 @@
 
 .totalVotes {
     display: flex;
-    justify-content: right;
     font-size: 15px;
     color: green;
 }
