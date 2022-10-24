@@ -6,7 +6,7 @@ import useLocalStorage from "../util/localStorageHook";
 const AppContext = createContext();
 
 export function PollCreationStore(props) {
-    const { setIsOnLoginPage, setIsOnRegisterPage } = useLoginStore();
+    const { setIsOnLoginPage, setIsOnRegisterPage, loggedUser } = useLoginStore();
 
     const title = useRef('');
     const [options, setOptions] = useState([{
@@ -65,6 +65,8 @@ export function PollCreationStore(props) {
     const submitFormHandler = (event) => {
         event.preventDefault();
         options[0].title = title.current.value;
+        options[0].creatorId = loggedUser.id;
+        options[0].creatorUsername = loggedUser.username;
         for (let option of options[0].options) {
             if (option.text === undefined || option.text === '' || !title || title.current.value === '') {
                 return alert('No empty fields are allowed! Either fill in or remove the empty options.');
@@ -98,6 +100,14 @@ export function PollCreationStore(props) {
         setIsOnHomePage(false);
     }
 
+    const deletePollHandler = event => {
+        const selectedPollIndex = polls.findIndex(poll => poll.id === event.target.id);
+        polls.splice(selectedPollIndex, 1);
+        setPolls(previousState => {
+            return [...previousState];
+        });
+    }
+
     return (
         <AppContext.Provider
             value={{
@@ -118,6 +128,7 @@ export function PollCreationStore(props) {
                 removeOptionHandler,
                 inputChangeHandler,
                 createAnotherPollHandler,
+                deletePollHandler,
             }}
         >
             {props.children}

@@ -39,4 +39,14 @@
 
 .btn {
     margin: 5px;
+    width: 75px;
+}
+
+.creator {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.title {
+    font-size: 25px;
 }

@@ -16,8 +16,8 @@ export function LoginStore(props) {
             const response = await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json');
             const data = await response.json();
             const userData = [];
-            for (let user in data) {
-                userData.push(data[user]);
+            for (let userId in data) {
+                userData.push(data[userId]);
             }
             setUsers(userData);
         } catch (err) {
@@ -94,12 +94,18 @@ export function LoginStore(props) {
     return (
         <AppContext.Provider
             value={{
-                users, loginHandler,
-                isLoggedIn, setIsLoggedIn,
-                isOnLoginPage, setIsOnLoginPage,
-                loggedUser, setLoggedUser,
-                isOnRegisterPage, setIsOnRegisterPage,
-                registerHandler, getUsers
+                users,
+                isLoggedIn,
+                setIsLoggedIn,
+                isOnLoginPage,
+                loggedUser,
+                setLoggedUser,
+                isOnRegisterPage,
+                loginHandler,
+                setIsOnLoginPage,
+                setIsOnRegisterPage,
+                registerHandler,
+                getUsers
             }}
         >
             {props.children}
