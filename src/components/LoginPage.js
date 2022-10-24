@@ -1,12 +1,11 @@
 import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './LoginPage.module.css';
-// import useLocalStorage from '../util/localStorageHook';
 import { useState } from "react";
 import useStore from "../store/pollCreationStore";
 
 const LoginPage = props => {
-    const { homePageRedirect } = useStore();
+    const { registerPageRedirect } = useStore();
     const { loginHandler, isLoggedIn } = useLoginStore();
     const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
@@ -38,7 +37,7 @@ const LoginPage = props => {
                 </div>
                 <div>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={homePageRedirect}>Register</Button>
+                    <Button color="success" onClick={registerPageRedirect}>Register</Button>
                 </div>
             </form>}
             {isLoggedIn &&

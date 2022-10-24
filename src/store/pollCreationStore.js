@@ -6,7 +6,7 @@ import useLocalStorage from "../util/localStorageHook";
 const AppContext = createContext();
 
 export function PollCreationStore(props) {
-    const { setIsOnLoginPage } = useLoginStore();
+    const { setIsOnLoginPage, setIsOnRegisterPage } = useLoginStore();
 
     const title = useRef('');
     const [options, setOptions] = useState([{
@@ -40,7 +40,16 @@ export function PollCreationStore(props) {
         setIsFormSubmitted(false);
         setIsOnPollsPage(false);
         setIsOnLoginPage(false);
+        setIsOnRegisterPage(false);
         setIsOnHomePage(true);
+    };
+
+    const registerPageRedirect = (event) => {
+        setIsFormSubmitted(false);
+        setIsOnPollsPage(false);
+        setIsOnLoginPage(false);
+        setIsOnHomePage(true);
+        setIsOnRegisterPage(true);
     };
 
     const removeOptionHandler = (event) => {
@@ -67,7 +76,7 @@ export function PollCreationStore(props) {
         });
 
         setPolls(previousState => {
-            return [...previousState, options[0]];
+            return [options[0], ...previousState];
         })
 
         setIsFormSubmitted(true);
@@ -85,6 +94,7 @@ export function PollCreationStore(props) {
         setIsOnLoginPage(false);
         setIsOnPollsPage(false);
         setIsFormSubmitted(false);
+        setIsOnRegisterPage(false);
         setIsOnHomePage(false);
     }
 
@@ -98,6 +108,7 @@ export function PollCreationStore(props) {
                 isOnPollsPage,
                 isOnHomePage,
                 setPolls,
+                registerPageRedirect,
                 setIsOnPollsPage,
                 setIsOnHomePage,
                 setIsFormSubmitted,
@@ -106,7 +117,7 @@ export function PollCreationStore(props) {
                 addOptionHandler,
                 removeOptionHandler,
                 inputChangeHandler,
-                createAnotherPollHandler
+                createAnotherPollHandler,
             }}
         >
             {props.children}

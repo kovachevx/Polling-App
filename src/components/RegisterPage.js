@@ -2,10 +2,12 @@ import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './RegisterPage.module.css';
 import { useState } from "react";
+import useStore from '../store/pollCreationStore';
 
 const RegisterPage = props => {
 
-    const { registerHandler, isLoggedIn } = useLoginStore();
+    const { registerHandler, isLoggedIn, isOnRegisterPage, registerPageRedirect } = useLoginStore();
+    const { isOnHomePage } = useStore();
     const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
     const [enteredRepass, setEnteredRepass] = useState('');
@@ -23,7 +25,7 @@ const RegisterPage = props => {
     }
 
     return (<>
-        {!isLoggedIn &&
+        {(!isLoggedIn && isOnRegisterPage && isOnHomePage) &&
             <div>
                 <h2 className={classes.h2}>Register</h2>
                 < form onSubmit={(e) => registerHandler(e, enteredUsername, enteredPassword, enteredRepass)} className={classes.formContainer}>

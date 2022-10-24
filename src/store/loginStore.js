@@ -7,6 +7,7 @@ const AppContext = createContext();
 export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
     const [isOnLoginPage, setIsOnLoginPage] = useState(false);
+    const [isOnRegisterPage, setIsOnRegisterPage] = useState(false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
     const [users, setUsers] = useState([]);
 
@@ -31,7 +32,7 @@ export function LoginStore(props) {
             return alert('All fields are required');
         }
 
-        getUsers();
+        await getUsers();
 
         let successfulLogin = false;
 
@@ -74,7 +75,7 @@ export function LoginStore(props) {
         }
 
         const newUser = {
-            id: users.length,
+            id: Math.random().toString(),
             username,
             password
         }
@@ -85,7 +86,9 @@ export function LoginStore(props) {
         });
 
         setLoggedUser({ id: newUser.id, username: newUser.username });
+        setIsOnRegisterPage(false);
         setIsLoggedIn(true);
+        await getUsers();
     };
 
     return (
@@ -95,7 +98,8 @@ export function LoginStore(props) {
                 isLoggedIn, setIsLoggedIn,
                 isOnLoginPage, setIsOnLoginPage,
                 loggedUser, setLoggedUser,
-                registerHandler
+                isOnRegisterPage, setIsOnRegisterPage,
+                registerHandler, getUsers
             }}
         >
             {props.children}

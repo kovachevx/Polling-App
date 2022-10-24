@@ -14,3 +14,7 @@
 .h2 {
     text-decoration: underline;
 }
+
+.registerPrompt {
+    margin-bottom: 10px;
+}

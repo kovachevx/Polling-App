@@ -5,7 +5,7 @@ import useLoginStore from '../store/loginStore';
 import { Button } from "reactstrap";
 
 const PollsPage = props => {
-    const { polls, homePageRedirect } = useStore();
+    const { polls, registerPageRedirect, homePageRedirect } = useStore();
     const { isLoggedIn } = useLoginStore();
 
     return (
@@ -15,7 +15,7 @@ const PollsPage = props => {
                 <div>
                     <p>Only logged in users can vote!</p>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={homePageRedirect}>Register</Button>
+                    <Button color="success" onClick={registerPageRedirect}>Register</Button>
                 </div>
             }
             {polls && polls.map(poll => {
@@ -23,8 +23,14 @@ const PollsPage = props => {
                     <SinglePollCard key={Math.random().toString()} options={poll}></SinglePollCard>
                 );
             })}
-            {!polls.length &&
+            {(!polls.length && isLoggedIn) &&
                 <p className={classes.p}>...There are no polls yet! Be the first to create one by clicking on the "Create Poll" button.</p>}
+            {(!polls.length && !isLoggedIn) &&
+                <div className={classes.registerPrompt}>
+                    <p className={classes.p}>...There are no polls yet! Be the first to create one by logging in and clicking on the "Create Poll" button.</p>
+                    <span>Don't have an account yet? &nbsp;</span>
+                    <Button color="success" onClick={homePageRedirect}>Register</Button>
+                </div>}
         </div >
     );
 }
