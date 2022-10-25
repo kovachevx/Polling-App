@@ -3,9 +3,9 @@ import { Button } from "reactstrap";
 import classes from './LoginPage.module.css';
 import { useState } from "react";
 import useStore from "../store/pollCreationStore";
+import { Link } from "react-router-dom";
 
 const LoginPage = props => {
-    const { registerPageRedirect } = useStore();
     const { loginHandler, isLoggedIn } = useLoginStore();
     const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
@@ -37,7 +37,7 @@ const LoginPage = props => {
                 </div>
                 <div>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={registerPageRedirect}>Register</Button>
+                    <Link to="/register"><Button color="success">Register</Button></Link>
                 </div>
             </form>}
             {isLoggedIn &&

@@ -7,17 +7,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { PollCreationStore } from './store/pollCreationStore';
 import { VoteStore } from './store/voteStore';
 import { LoginStore } from './store/loginStore';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <LoginStore>
-    <PollCreationStore>
-      <VoteStore>
-        <App />
-      </VoteStore>
-    </PollCreationStore>
-  </LoginStore>
+  <BrowserRouter>
+    <LoginStore>
+      <PollCreationStore>
+        <VoteStore>
+          <App />
+        </VoteStore>
+      </PollCreationStore>
+    </LoginStore>
+  </BrowserRouter>
   // </React.StrictMode>
 );
 

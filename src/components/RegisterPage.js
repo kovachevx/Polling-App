@@ -2,15 +2,17 @@ import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './RegisterPage.module.css';
 import { useState } from "react";
-import useStore from '../store/pollCreationStore';
+import { Redirect } from 'react-router-dom';
 
 const RegisterPage = props => {
-
-    const { registerHandler, isLoggedIn, isOnRegisterPage, registerPageRedirect } = useLoginStore();
-    const { isOnHomePage } = useStore();
+    const { registerHandler, isLoggedIn } = useLoginStore();
     const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
     const [enteredRepass, setEnteredRepass] = useState('');
+
+    if (isLoggedIn) {
+        return <Redirect path="/" />
+    }
 
     const getUsername = (event) => {
         setEnteredUsername(event.target.value);
@@ -24,33 +26,30 @@ const RegisterPage = props => {
         setEnteredRepass(event.target.value);
     }
 
-    return (<>
-        {(!isLoggedIn && isOnRegisterPage && isOnHomePage) &&
-            <div>
-                <h2 className={classes.h2}>Register</h2>
-                < form onSubmit={(e) => registerHandler(e, enteredUsername, enteredPassword, enteredRepass)} className={classes.formContainer}>
-                    <div className={classes.inputsContainer}>
-                        <div className='d-flex justify-content-center'>
-                            <label htmlFor="registerUsername">Enter username:&nbsp;</label>
-                            <input type="text" id="registerUsername" onChange={getUsername} required />
-                        </div>
-                        <div className='d-flex justify-content-center'>
-                            <label htmlFor="registerPassword">Enter password:&nbsp;</label>
-                            <input type="password" id="registerPassword" onChange={getPassword} required />
-                        </div>
-                        <div className='d-flex justify-content-center'>
-                            <label htmlFor="registerRepass">Repeat password:&nbsp;</label>
-                            <input type="password" id="registerRepass" onChange={getRepass} required />
-                        </div>
-                        <p className={classes.para}>Already have an account? Simply log in.</p>
-                        <div className='d-flex justify-content-center'>
-                            <Button className={classes.btn} color='success'>Register</Button>
-                        </div>
+    return (
+        <div>
+            <h2 className={classes.h2}>Register</h2>
+            < form onSubmit={(e) => registerHandler(e, enteredUsername, enteredPassword, enteredRepass)} className={classes.formContainer}>
+                <div className={classes.inputsContainer}>
+                    <div className='d-flex justify-content-center'>
+                        <label htmlFor="registerUsername">Enter username:&nbsp;</label>
+                        <input type="text" id="registerUsername" onChange={getUsername} required />
                     </div>
-                </form>
-            </div >
-        }
-    </>
+                    <div className='d-flex justify-content-center'>
+                        <label htmlFor="registerPassword">Enter password:&nbsp;</label>
+                        <input type="password" id="registerPassword" onChange={getPassword} required />
+                    </div>
+                    <div className='d-flex justify-content-center'>
+                        <label htmlFor="registerRepass">Repeat password:&nbsp;</label>
+                        <input type="password" id="registerRepass" onChange={getRepass} required />
+                    </div>
+                    <p className={classes.para}>Already have an account? Simply log in.</p>
+                    <div className='d-flex justify-content-center'>
+                        <Button className={classes.btn} color='success'>Register</Button>
+                    </div>
+                </div>
+            </form>
+        </div >
     );
 }
 

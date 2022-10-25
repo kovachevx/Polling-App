@@ -1,26 +1,25 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext } from "react";
 import { useState, useRef } from "react";
 import useLoginStore from "./loginStore";
 import useLocalStorage from "../util/localStorageHook";
+import { useHistory } from "react-router-dom";
 
 const AppContext = createContext();
 
+const optionsBase = [{
+    id: Math.random().toString(),
+    options:
+        [{ id: Math.random().toString(), votes: 0 },
+        { id: Math.random().toString(), votes: 0 }],
+    totalVotes: 0,
+    voters: []
+}];
+
 export function PollCreationStore(props) {
-    const { setIsOnLoginPage, setIsOnRegisterPage, loggedUser } = useLoginStore();
-
     const title = useRef('');
-    const [options, setOptions] = useState([{
-        id: Math.random().toString(),
-        options:
-            [{ id: Math.random().toString(), votes: 0 },
-            { id: Math.random().toString(), votes: 0 }],
-        totalVotes: 0,
-        voters: []
-    }]);
-
-    const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-    const [isOnPollsPage, setIsOnPollsPage] = useState(false);
-    const [isOnHomePage, setIsOnHomePage] = useState(true);
+    const history = useHistory();
+    const { loggedUser } = useLoginStore();
+    const [options, setOptions] = useState(optionsBase);
     const [polls, setPolls] = useLocalStorage('polls', []);
 
     const addOptionHandler = (event) => {
@@ -35,22 +34,6 @@ export function PollCreationStore(props) {
     const inputChangeHandler = (event, idx) => {
         options[0].options[idx].text = event.target.value;
     }
-
-    const homePageRedirect = (event) => {
-        setIsFormSubmitted(false);
-        setIsOnPollsPage(false);
-        setIsOnLoginPage(false);
-        setIsOnRegisterPage(false);
-        setIsOnHomePage(true);
-    };
-
-    const registerPageRedirect = (event) => {
-        setIsFormSubmitted(false);
-        setIsOnPollsPage(false);
-        setIsOnLoginPage(false);
-        setIsOnHomePage(true);
-        setIsOnRegisterPage(true);
-    };
 
     const removeOptionHandler = (event) => {
         event.preventDefault();
@@ -81,7 +64,7 @@ export function PollCreationStore(props) {
             return [options[0], ...previousState];
         })
 
-        setIsFormSubmitted(true);
+        history.push('/submitted');
     };
 
     const createAnotherPollHandler = () => {
@@ -93,11 +76,7 @@ export function PollCreationStore(props) {
             totalVotes: 0,
             voters: []
         }]);
-        setIsOnLoginPage(false);
-        setIsOnPollsPage(false);
-        setIsFormSubmitted(false);
-        setIsOnRegisterPage(false);
-        setIsOnHomePage(false);
+        history.push('/create');
     }
 
     const deletePollHandler = event => {
@@ -114,15 +93,7 @@ export function PollCreationStore(props) {
                 polls,
                 title,
                 options,
-                isFormSubmitted,
-                isOnPollsPage,
-                isOnHomePage,
                 setPolls,
-                registerPageRedirect,
-                setIsOnPollsPage,
-                setIsOnHomePage,
-                setIsFormSubmitted,
-                homePageRedirect,
                 submitFormHandler,
                 addOptionHandler,
                 removeOptionHandler,

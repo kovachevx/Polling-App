@@ -1,15 +1,15 @@
 import React, { createContext, useEffect } from "react";
 import { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../util/localStorageHook";
 
 const AppContext = createContext();
 
 export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
-    const [isOnLoginPage, setIsOnLoginPage] = useState(false);
-    const [isOnRegisterPage, setIsOnRegisterPage] = useState(false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
     const [users, setUsers] = useState([]);
+    const history = useHistory();
 
     async function getUsers() {
         try {
@@ -85,10 +85,11 @@ export function LoginStore(props) {
             body: JSON.stringify(newUser)
         });
 
-        setLoggedUser({ id: newUser.id, username: newUser.username });
-        setIsOnRegisterPage(false);
         setIsLoggedIn(true);
+        setLoggedUser({ id: newUser.id, username: newUser.username });
         await getUsers();
+
+        history.push('/polls');
     };
 
     return (
@@ -97,13 +98,9 @@ export function LoginStore(props) {
                 users,
                 isLoggedIn,
                 setIsLoggedIn,
-                isOnLoginPage,
                 loggedUser,
                 setLoggedUser,
-                isOnRegisterPage,
                 loginHandler,
-                setIsOnLoginPage,
-                setIsOnRegisterPage,
                 registerHandler,
                 getUsers
             }}

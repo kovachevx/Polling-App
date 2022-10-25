@@ -44,7 +44,6 @@ export function VoteStore(props) {
     const viewResultsHandler = (event) => {
         const clickedPoll = polls.find(poll => poll.id === event.target.id);
         setResultModalProps({ ...clickedPoll, isOpen: true });
-        console.log(polls);
     };
 
     return (

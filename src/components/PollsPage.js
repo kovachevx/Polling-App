@@ -4,9 +4,10 @@ import SinglePollCard from "./SinglePoll";
 import useLoginStore from '../store/loginStore';
 import { Button } from "reactstrap";
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PollsPage = props => {
-    const { polls, registerPageRedirect, homePageRedirect } = useStore();
+    const { polls } = useStore();
     const { isLoggedIn } = useLoginStore();
     const [soughtPhrase, setSoughtPhrase] = useState('');
     const [filteredPolls, setFilteredPolls] = useState(polls);
@@ -29,7 +30,7 @@ const PollsPage = props => {
             }
             setFilteredPolls(filteredArray);
         }
-    }, [soughtPhrase, polls])
+    }, [soughtPhrase, polls]);
 
     return (
         <div className={classes.pollsContainer}>
@@ -41,20 +42,22 @@ const PollsPage = props => {
                 <div className={classes.registerPrompt}>
                     <p>Only logged in users can vote!</p>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={registerPageRedirect}>Register</Button>
-                </div>
-            }
+                    <Link to="/register"><Button color="success">Register</Button></Link>
+
+                </div>}
             {filteredPolls.length > 0 && filteredPolls.map(poll => {
                 return <SinglePollCard key={Math.random().toString()} options={poll} />;
             })}
             {(!polls.length && isLoggedIn) &&
-                <p className={classes.p}>...There are no polls yet! Be the first to create one by clicking on the "Create Poll" button.</p>}
+                <p className={classes.p}>...There are no polls yet! Be the first to create one by clicking on the "Create Poll" button.</p>
+            }
             {(!polls.length && !isLoggedIn) &&
                 <div className={classes.registerPrompt}>
                     <p className={classes.p}>...There are no polls yet! Be the first to create one by logging in and clicking on the "Create Poll" button.</p>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={homePageRedirect}>Register</Button>
-                </div>}
+                    <Link to="/register"><Button color="success">Register</Button></Link>
+                </div>
+            }
         </div >
     );
 }

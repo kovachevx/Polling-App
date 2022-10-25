@@ -3,19 +3,20 @@ import useStore from '../store/pollCreationStore';
 import Option from "./Option";
 import { Button } from "reactstrap";
 import useLoginStore from '../store/loginStore';
+import { Link } from 'react-router-dom';
 
 const CreatePoll = props => {
-    const { isOnHomePage, submitFormHandler, title, options, addOptionHandler, removeOptionHandler, inputChangeHandler, homePageRedirect, registerPageRedirect } = useStore();
+    const { submitFormHandler, title, options, addOptionHandler, removeOptionHandler, inputChangeHandler } = useStore();
     const { isLoggedIn } = useLoginStore();
 
     return (
         <div>
             <h2 className={classes.h2}><i>CREATE POLL</i></h2>
-            {(!isLoggedIn && !isOnHomePage) &&
+            {!isLoggedIn &&
                 <div>
                     <p>Only logged in users can create polls.</p>
                     <span>Don't have an account yet? &nbsp;</span>
-                    <Button color="success" onClick={registerPageRedirect}>Register</Button>
+                    <Link className={classes.link} to="/register"><Button color="success">Register</Button></Link>
                 </div>}
             {isLoggedIn && <form onSubmit={submitFormHandler} className={classes.formContainer}>
                 <div className={classes.titleContainer}>
