@@ -36,7 +36,7 @@ const PollsPage = props => {
         <div className={classes.pollsContainer}>
             <h2 className={classes.h2}><i>Les Polls Paget</i></h2>
             <div>
-                <input placeholder='Find poll...' onChange={searchHandler} />
+                <input className={classes.searchBar} placeholder='Find poll by its title or creator...' onChange={searchHandler} />
             </div>
             {(polls.length > 0 && !isLoggedIn) &&
                 <div className={classes.registerPrompt}>

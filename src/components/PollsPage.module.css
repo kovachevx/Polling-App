@@ -18,3 +18,7 @@
 .registerPrompt {
     margin: 10px 0;
 }
+
+.searchBar {
+    width: 250px;
+}
