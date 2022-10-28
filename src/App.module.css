@@ -1,8 +1,8 @@
 .appContainer {
   text-align: center;
   max-width: 2040px;
-  min-height: 713px;
-  height: auto;
+  min-height: 809px;
+  height: auto; 
   background-image: linear-gradient(to right, brown, orange);
   color: #F3FFBD;
 }

@@ -6,10 +6,16 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 const Navigation = props => {
-    const { createAnotherPollHandler } = useStore();
+    const { createAnotherPollHandler, getPolls } = useStore();
     const { isLoggedIn, loggedUser, setIsLoggedIn, setLoggedUser } = useLoginStore();
 
     const history = useHistory();
+
+    const viewPollsNavigation = async () => {
+         getPolls();
+        
+        history.push('/polls');
+    }
 
     const logoutHandler = (event) => {
         setIsLoggedIn(false);
@@ -25,7 +31,7 @@ const Navigation = props => {
                 </div>
             </div>
             <div className={classes.headingButtonContainer}>
-                <Button className={classes.btn} onClick={() => history.push('/polls')} color='success'>View Polls</Button>
+                <Button className={classes.btn} onClick={viewPollsNavigation} color='success'>View Polls</Button>
                 <Button className={classes.btn} onClick={createAnotherPollHandler} color='primary'>Create Poll</Button>
                 <div>
                     <Button className={classes.btn}

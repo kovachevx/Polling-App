@@ -6,7 +6,7 @@ import useStore from "./pollCreationStore";
 const AppContext = createContext();
 
 export function VoteStore(props) {
-    const { polls, setPolls } = useStore();
+    const { fetchedPolls } = useStore();
     const [selectedOption, setSelectedOption] = useState('');
     const [voteModalProps, setVoteModalProps] = useState({ isOpen: false });
     const [resultModalProps, setResultModalProps] = useState({ isOpen: false });
@@ -16,7 +16,7 @@ export function VoteStore(props) {
     const toggleResultsModal = () => setResultModalProps({ ...resultModalProps, isOpen: !resultModalProps.isOpen });
 
     const viewPollHandler = (event) => {
-        const clickedPoll = polls.find(poll => poll.id === event.target.id);
+        const clickedPoll = fetchedPolls.find(poll => poll.id === event.target.id);
         setSelectedOption('');
         setVoteModalProps({ ...clickedPoll, isOpen: true });
     }
@@ -25,14 +25,13 @@ export function VoteStore(props) {
         const chosenOption = poll.options.find(option => option.text === selectedOption);
         chosenOption.votes++;
 
-        const currentPoll = polls.find(p => p.id === poll.id);
+        const currentPoll = fetchedPolls.find(p => p.id === poll.id);
         currentPoll.totalVotes++;
 
-        poll.voters.push(loggedUser.username)
+        if (!currentPoll.voters) currentPoll.voters = [];
+        currentPoll.voters.push(loggedUser.username);
 
-        setPolls(previousState => {
-            return [...previousState];
-        });
+        updatePoll(currentPoll);
 
         if (selectedOption === '') {
             return alert('You have to select an option in order to vote.');
@@ -42,9 +41,20 @@ export function VoteStore(props) {
     }
 
     const viewResultsHandler = (event) => {
-        const clickedPoll = polls.find(poll => poll.id === event.target.id);
+        const clickedPoll = fetchedPolls.find(poll => poll.id === event.target.id);
         setResultModalProps({ ...clickedPoll, isOpen: true });
     };
+
+    async function updatePoll(poll) {
+        try {
+            await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${poll.pollId}.json`, {
+                method: 'PUT',
+                body: JSON.stringify({ ...poll })
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <AppContext.Provider

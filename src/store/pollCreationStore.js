@@ -1,7 +1,6 @@
 import React, { createContext } from "react";
 import { useState, useRef } from "react";
 import useLoginStore from "./loginStore";
-import useLocalStorage from "../util/localStorageHook";
 import { useHistory } from "react-router-dom";
 
 const AppContext = createContext();
@@ -18,9 +17,9 @@ const optionsBase = [{
 export function PollCreationStore(props) {
     const title = useRef('');
     const history = useHistory();
-    const { loggedUser } = useLoginStore();
+    const { loggedUser, setIsLoading } = useLoginStore();
     const [options, setOptions] = useState(optionsBase);
-    const [polls, setPolls] = useLocalStorage('polls', []);
+    const [fetchedPolls, setFetchedPolls] = useState([]);
 
     const addOptionHandler = (event) => {
         event.preventDefault();
@@ -50,9 +49,18 @@ export function PollCreationStore(props) {
         options[0].title = title.current.value;
         options[0].creatorId = loggedUser.id;
         options[0].creatorUsername = loggedUser.username;
+        options[0].voters = [];
+
+        const currentOptions = [];
+
         for (let option of options[0].options) {
             if (option.text === undefined || option.text === '' || !title || title.current.value === '') {
                 return alert('No empty fields are allowed! Either fill in or remove the empty options.');
+            }
+            if (currentOptions.includes(option.text)) {
+                return alert('No matching options are allowed. Either change or remove the option in question.')
+            } else {
+                currentOptions.push(option.text);
             }
         }
 
@@ -60,10 +68,7 @@ export function PollCreationStore(props) {
             return [...previousState];
         });
 
-        setPolls(previousState => {
-            return [options[0], ...previousState];
-        })
-
+        postPoll(options[0]);
         history.push('/submitted');
     };
 
@@ -74,26 +79,68 @@ export function PollCreationStore(props) {
                 [{ id: Math.random().toString(), votes: 0 },
                 { id: Math.random().toString(), votes: 0 }],
             totalVotes: 0,
-            voters: []
+            voters: [],
         }]);
         history.push('/create');
     }
 
-    const deletePollHandler = event => {
-        const selectedPollIndex = polls.findIndex(poll => poll.id === event.target.id);
-        polls.splice(selectedPollIndex, 1);
-        setPolls(previousState => {
-            return [...previousState];
-        });
+    const deletePollHandler = async (event) => {
+        const selectedPoll = fetchedPolls.find(poll => poll.id === event.target.id);
+        try {
+            await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${selectedPoll.pollId}.json`, { method: 'DELETE' });
+            await getPolls();
+        } catch (err) {
+            alert('There was an error processing your deletion request. Please try again later.');
+        }
+    }
+
+    async function getPolls() {
+        try {
+            setIsLoading(true);
+            const response = await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms.json');
+            const data = await response.json();
+            const userData = [];
+            for (let userId in data) {
+                userData.push(data[userId]);
+            }
+            setFetchedPolls([...userData].reverse());
+        } catch (err) {
+            console.log(err);
+        }
+        setIsLoading(false);
+    }
+
+    async function postPoll(newPoll) {
+        try {
+            const response = await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms.json', {
+                method: 'POST',
+                body: JSON.stringify(newPoll)
+            });
+            const data = await response.json();
+            await idReplacer(data.name);
+        } catch (err) {
+            alert('There was an error posting your poll. Please retry submitting it.');
+        }
+    }
+
+    async function idReplacer(id) {
+        try {
+            await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${id}.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ pollId: id, voters: [] })
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
         <AppContext.Provider
             value={{
-                polls,
                 title,
                 options,
-                setPolls,
+                fetchedPolls,
+                getPolls,
                 submitFormHandler,
                 addOptionHandler,
                 removeOptionHandler,

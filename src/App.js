@@ -11,12 +11,15 @@ import RegisterPage from './components/RegisterPage';
 import Navigation from './components/Navigation';
 import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import useStore from './store/pollCreationStore';
 
 function App() {
   const { getUsers } = useLoginStore();
+  const { getPolls } = useStore();
 
   useEffect(() => {
-    getUsers()
+    getUsers();
+    getPolls();
   }, []);
 
   return (

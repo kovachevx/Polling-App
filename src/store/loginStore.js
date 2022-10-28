@@ -2,6 +2,7 @@ import React, { createContext, useEffect } from "react";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../util/localStorageHook";
+import useStore from "./pollCreationStore";
 
 const AppContext = createContext();
 
@@ -9,6 +10,7 @@ export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
 
     async function getUsers() {
@@ -28,25 +30,20 @@ export function LoginStore(props) {
     const loginHandler = async (event, username, password) => {
         event.preventDefault();
 
-        if (username.trim() === '' || password.trim() === '') {
-            return alert('All fields are required');
-        }
+        if (username.trim() === '' || password.trim() === '') alert('All fields are required');
 
         await getUsers();
-
         let successfulLogin = false;
 
         users.forEach(user => {
             if (user.username === username && user.password === password) {
-                setLoggedUser({ id: user.id, username: user.username });
+                setLoggedUser({ id: user.id, username: user.username, role: user.role });
                 setIsLoggedIn(true);
                 successfulLogin = true;
             }
         });
 
-        if (!successfulLogin) {
-            return alert('Invalid credentials!');
-        }
+        if (!successfulLogin) alert('Invalid credentials!');
     }
 
     const registerHandler = async (event, username, password, repass) => {
@@ -56,8 +53,7 @@ export function LoginStore(props) {
             return alert('All fields are required');
         }
 
-        getUsers();
-
+        await getUsers();
         let userAlreadyExists = false;
 
         for (let user of users) {
@@ -74,10 +70,13 @@ export function LoginStore(props) {
             return alert('Passwords don\'t match!');
         }
 
+        setIsLoading(true);
+
         const newUser = {
             id: Math.random().toString(),
             username,
-            password
+            password,
+            role: 'user'
         }
 
         await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json', {
@@ -86,8 +85,9 @@ export function LoginStore(props) {
         });
 
         setIsLoggedIn(true);
-        setLoggedUser({ id: newUser.id, username: newUser.username });
+        setLoggedUser({ id: newUser.id, username: newUser.username, role: newUser.role });
         await getUsers();
+        setIsLoading(false);
 
         history.push('/polls');
     };
@@ -100,6 +100,8 @@ export function LoginStore(props) {
                 setIsLoggedIn,
                 loggedUser,
                 setLoggedUser,
+                isLoading,
+                setIsLoading,
                 loginHandler,
                 registerHandler,
                 getUsers
