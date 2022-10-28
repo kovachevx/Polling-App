@@ -101,6 +101,7 @@ export function PollCreationStore(props) {
             const data = await response.json();
             const userData = [];
             for (let userId in data) {
+                data[userId].pollId = userId;
                 userData.push(data[userId]);
             }
             setFetchedPolls([...userData].reverse());
@@ -116,23 +117,22 @@ export function PollCreationStore(props) {
                 method: 'POST',
                 body: JSON.stringify(newPoll)
             });
-            const data = await response.json();
-            await idReplacer(data.name);
+            if(!response.ok) throw new Error('Losho');
         } catch (err) {
             alert('There was an error posting your poll. Please retry submitting it.');
         }
     }
 
-    async function idReplacer(id) {
-        try {
-            await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${id}.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ pollId: id, voters: [] })
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    }
+    // async function idReplacer(id) {
+    //     try {
+    //         await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${id}.json`, {
+    //             method: 'PATCH',
+    //             body: JSON.stringify({ pollId: id, voters: [] })
+    //         });
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }
 
     return (
         <AppContext.Provider
