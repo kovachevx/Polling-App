@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
 import { useState, useRef } from "react";
 import useLoginStore from "./loginStore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AppContext = createContext();
 
@@ -16,7 +16,7 @@ const optionsBase = [{
 
 export function PollCreationStore(props) {
     const title = useRef('');
-    const history = useHistory();
+    const navigate = useNavigate();
     const { loggedUser, setIsLoading } = useLoginStore();
     const [options, setOptions] = useState(optionsBase);
     const [fetchedPolls, setFetchedPolls] = useState([]);
@@ -69,7 +69,7 @@ export function PollCreationStore(props) {
         });
 
         postPoll(options[0]);
-        history.push('/submitted');
+        navigate('/submitted', { replace: true });
     };
 
     const createAnotherPollHandler = () => {
@@ -81,7 +81,7 @@ export function PollCreationStore(props) {
             totalVotes: 0,
             voters: [],
         }]);
-        history.push('/create');
+        navigate('/create');
     }
 
     const deletePollHandler = async (event) => {
@@ -117,22 +117,11 @@ export function PollCreationStore(props) {
                 method: 'POST',
                 body: JSON.stringify(newPoll)
             });
-            if(!response.ok) throw new Error('Losho');
+            if (!response.ok) throw new Error('Losho');
         } catch (err) {
             alert('There was an error posting your poll. Please retry submitting it.');
         }
     }
-
-    // async function idReplacer(id) {
-    //     try {
-    //         await fetch(`https://polling-app-2bee2-default-rtdb.firebaseio.com/rooms/${id}.json`, {
-    //             method: 'PATCH',
-    //             body: JSON.stringify({ pollId: id, voters: [] })
-    //         });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
 
     return (
         <AppContext.Provider

@@ -5,12 +5,11 @@ import SubmittedForm from './components/SubmittedForm';
 import PollsPage from './components/PollsPage';
 import VoteModal from './components/VoteModal';
 import ResultsModal from './components/ResultsModal'
-import useLoginStore from './store/loginStore';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import Navigation from './components/Navigation';
 import { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import useStore from './store/pollCreationStore';
 
 function App() {
@@ -23,14 +22,14 @@ function App() {
   return (
     <div className={classes.appContainer}>
       <Navigation />
-      <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route path='/create' component={CreatePoll} />
-        <Route path='/submitted' component={SubmittedForm} />
-        <Route path='/polls' component={PollsPage} />
-        <Route path='/login' component={LoginPage} />
-        <Route path='/register' component={RegisterPage} />
-      </Switch >
+      <Routes>
+        <Route exact path='/' element={<HomePage />} />
+        <Route path='/create' element={<CreatePoll />} />
+        <Route path='/submitted' element={<SubmittedForm />} />
+        <Route path='/polls' element={<PollsPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
+      </Routes >
       <VoteModal />
       <ResultsModal />
     </div >

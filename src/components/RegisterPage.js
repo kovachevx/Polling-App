@@ -2,7 +2,7 @@ import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './RegisterPage.module.css';
 import { useState } from "react";
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const RegisterPage = props => {
     const { registerHandler, isLoggedIn } = useLoginStore();
@@ -11,7 +11,7 @@ const RegisterPage = props => {
     const [enteredRepass, setEnteredRepass] = useState('');
 
     if (isLoggedIn) {
-        return <Redirect path="/" />
+        return <Navigate to="/" replace={true}/>
     }
 
     const getUsername = (event) => {

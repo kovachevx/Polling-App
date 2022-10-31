@@ -3,18 +3,13 @@ import useStore from '../store/pollCreationStore';
 import { Button } from 'reactstrap';
 import useLoginStore from '../store/loginStore';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Navigation = props => {
-    const { createAnotherPollHandler, getPolls } = useStore();
+    const { createAnotherPollHandler } = useStore();
     const { isLoggedIn, loggedUser, setIsLoggedIn, setLoggedUser } = useLoginStore();
 
-    const history = useHistory();
-
-    const viewPollsNavigation = async () => {
-        getPolls();
-        history.push('/polls');
-    }
+    const navigate = useNavigate();
 
     const logoutHandler = (event) => {
         setIsLoggedIn(false);
@@ -30,12 +25,12 @@ const Navigation = props => {
                 </div>
             </div>
             <div className={classes.headingButtonContainer}>
-                <Button className={classes.btn} onClick={viewPollsNavigation} color='success'>View Polls</Button>
+                <Button className={classes.btn} onClick={() => navigate('/polls')} color='success'>View Polls</Button>
                 <Button className={classes.btn} onClick={createAnotherPollHandler} color='primary'>Create Poll</Button>
                 <div>
                     <Button className={classes.btn}
                         color={!isLoggedIn ? 'warning' : 'danger'}
-                        onClick={isLoggedIn ? logoutHandler : () => history.push('/login')}
+                        onClick={isLoggedIn ? logoutHandler : () => navigate('/login')}
                     >
                         {isLoggedIn ? 'Logout' : 'Login'}
                     </Button>

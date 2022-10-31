@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 import { useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from "../util/localStorageHook";
 
 const AppContext = createContext();
@@ -9,7 +9,7 @@ export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
     const [isLoading, setIsLoading] = useState(false);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const loginHandler = async (event, username, password) => {
         event.preventDefault();
@@ -83,7 +83,7 @@ export function LoginStore(props) {
             setIsLoggedIn(true);
             setLoggedUser({ username: email.substring(0, email.indexOf('@')), token: data.idToken });
             setIsLoading(false);
-            history.push('/polls');
+            navigate('/polls', { replace: true });
         } catch (err) {
             return alert(err.message);
         }
