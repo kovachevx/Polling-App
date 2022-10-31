@@ -2,7 +2,6 @@ import useLoginStore from "../store/loginStore";
 import { Button } from "reactstrap";
 import classes from './LoginPage.module.css';
 import { useState } from "react";
-import useStore from "../store/pollCreationStore";
 import { Link } from "react-router-dom";
 
 const LoginPage = props => {

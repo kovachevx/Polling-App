@@ -13,7 +13,6 @@ const Navigation = props => {
 
     const viewPollsNavigation = async () => {
         getPolls();
-
         history.push('/polls');
     }
 

@@ -22,7 +22,7 @@ const SinglePollCard = ({ options }) => {
                 {(isLoggedIn && options.voters?.includes(loggedUser.username)) && <p>You've already voted!</p>}
                 {(isLoggedIn && !options.voters?.includes(loggedUser.username)) && <Button className={classes.btn} id={options.id} color='primary' onClick={viewPollHandler}>Vote</Button>}
                 <Button className={classes.btn} id={options.id} color='success' onClick={viewResultsHandler}>Results</Button>
-                {(loggedUser.id === options.creatorId || loggedUser.username === 'kov') &&
+                {(loggedUser.id === options.creatorId || loggedUser.username === 'kovdi') &&
                     <Button className={classes.btn} id={options.id} color='danger' onClick={deletePollHandler}>Delete</Button>
                 }
             </div>

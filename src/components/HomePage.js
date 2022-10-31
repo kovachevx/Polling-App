@@ -1,6 +1,6 @@
 import classes from './HomePage.module.css';
-import { Button } from 'reactstrap';
 import useLoginStore from '../store/loginStore';
+import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 const HomePage = props => {

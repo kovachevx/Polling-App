@@ -1,7 +1,6 @@
 import classes from './VoteModal.module.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, ProgressBar } from "reactstrap";
 import useVoteStore from '../store/voteStore';
-import { useState } from 'react';
 
 const VoteModal = props => {
     const { voteModalProps, toggleVoteModal, voteHandler, setSelectedOption } = useVoteStore();
