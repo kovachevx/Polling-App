@@ -25,7 +25,7 @@ const LoginPage = props => {
                 <div className={classes.inputsContainer}>
                     <div className='d-flex justify-content-center'>
                         <label htmlFor="username">Username:&nbsp;</label>
-                        <input type="text" id="username" onChange={getUsername} required />
+                        <input type="email" id="username" onChange={getUsername} required />
                     </div>
                     <div className='d-flex justify-content-center'>
                         <label htmlFor="password">Password:&nbsp;</label>

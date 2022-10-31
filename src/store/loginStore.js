@@ -32,16 +32,50 @@ export function LoginStore(props) {
 
         if (username.trim() === '' || password.trim() === '') alert('All fields are required');
 
-        await getUsers();
         let successfulLogin = false;
 
-        users.forEach(user => {
-            if (user.username === username && user.password === password) {
-                setLoggedUser({ id: user.id, username: user.username, role: user.role });
-                setIsLoggedIn(true);
-                successfulLogin = true;
+        try {
+            const response = await fetch(
+                'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCvDSZGFs3HuiJ4E9nZryl_obiUEVfw9Xk',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: username,
+                        password: password,
+                        returnSecureToken: true,
+                    }),
+                });
+
+            const data = await response.json();
+
+            console.log(data);
+            console.log(data.idToken)
+
+            if (!response.ok) {
+                throw new Error('epa ne stava mbe')
             }
-        });
+
+            setLoggedUser({ username: username.substring(0, username.indexOf('@')), token: data.idToken });
+            setIsLoggedIn(true);
+            successfulLogin = true;
+
+        } catch (err) {
+            console.log(err.message);
+        }
+
+
+        // await getUsers();
+
+        // users.forEach(user => {
+        //     if (user.username === username && user.password === password) {
+        //         setLoggedUser({ id: user.id, username: user.username, role: user.role });
+        //         setIsLoggedIn(true);
+        //         successfulLogin = true;
+        //     }
+        // });
 
         if (!successfulLogin) alert('Invalid credentials!');
     }
@@ -53,41 +87,64 @@ export function LoginStore(props) {
             return alert('All fields are required');
         }
 
-        await getUsers();
-        let userAlreadyExists = false;
+        // await getUsers();
+        // let userAlreadyExists = false;
 
-        for (let user of users) {
-            if (user.username === username) {
-                userAlreadyExists = true;
-            }
-        }
+        // for (let user of users) {
+        //     if (user.username === username) {
+        //         userAlreadyExists = true;
+        //     }
+        // }
 
-        if (userAlreadyExists) {
-            return alert(`${username} is already taken, please choose another username!`);
-        }
+        // if (userAlreadyExists) {
+        //     return alert(`${username} is already taken, please choose another username!`);
+        // }
 
         if (password !== repass) {
             return alert('Passwords don\'t match!');
         }
 
-        setIsLoading(true);
+        // setIsLoading(true);
 
-        const newUser = {
-            id: Math.random().toString(),
-            username,
-            password,
-            role: 'user'
+        // const newUser = {
+        //     id: Math.random().toString(),
+        //     username,
+        //     password,
+        //     role: 'user'
+        // }
+
+        try {
+            const response = await fetch(
+                'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCvDSZGFs3HuiJ4E9nZryl_obiUEVfw9Xk',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: username,
+                        password: password,
+                        returnSecureToken: true,
+                    }),
+                });
+
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+
+            setIsLoggedIn(true);
+            setLoggedUser({ username: username.substring(0, username.indexOf('@')), token: data.idToken });
+            setIsLoading(false);
+            if (!response.ok) {
+                throw new Error('epa ne stava mbe')
+            }
+
+        } catch (err) {
+            console.log(err.message);
         }
 
-        await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json', {
-            method: 'POST',
-            body: JSON.stringify(newUser)
-        });
 
-        setIsLoggedIn(true);
-        setLoggedUser({ id: newUser.id, username: newUser.username, role: newUser.role });
-        await getUsers();
-        setIsLoading(false);
+
 
         history.push('/polls');
     };

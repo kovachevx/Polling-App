@@ -32,8 +32,8 @@ const RegisterPage = props => {
             < form onSubmit={(e) => registerHandler(e, enteredUsername, enteredPassword, enteredRepass)} className={classes.formContainer}>
                 <div className={classes.inputsContainer}>
                     <div className='d-flex justify-content-center'>
-                        <label htmlFor="registerUsername">Enter username:&nbsp;</label>
-                        <input type="text" id="registerUsername" onChange={getUsername} required />
+                        <label htmlFor="registerUsername">Enter email address:&nbsp;</label>
+                        <input type="email" id="registerUsername" onChange={getUsername} required />
                     </div>
                     <div className='d-flex justify-content-center'>
                         <label htmlFor="registerPassword">Enter password:&nbsp;</label>
