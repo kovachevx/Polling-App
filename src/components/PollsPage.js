@@ -4,7 +4,7 @@ import SinglePollCard from "./SinglePoll";
 import useLoginStore from '../store/loginStore';
 import { Button } from "reactstrap";
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import LoadingSpinner from './UI/LoadingSpinner';
 
 const PollsPage = props => {
@@ -38,6 +38,11 @@ const PollsPage = props => {
             <h2 className={classes.h2}><i>Les Polls Paget</i></h2>
             <div>
                 <input className={classes.searchBar} placeholder='Find poll by its title or creator...' onChange={searchHandler} />
+                <div className={classes.linksContainer}>
+                    <NavLink exact activeClassName={classes.activeNavLink} className={classes.navLink}to='/polls'>All Polls</NavLink>
+                    &nbsp;
+                    <NavLink activeClassName={classes.activeNavLink} className={classes.navLink} to='/polls/asd'>All Rooms</NavLink>
+                </div>
             </div>
             {(fetchedPolls.length > 0 && !isLoggedIn) &&
                 <div className={classes.registerPrompt}>
