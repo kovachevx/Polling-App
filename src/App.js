@@ -14,11 +14,9 @@ import { Route, Switch } from 'react-router-dom';
 import useStore from './store/pollCreationStore';
 
 function App() {
-  const { getUsers } = useLoginStore();
   const { getPolls } = useStore();
 
   useEffect(() => {
-    getUsers();
     getPolls();
   }, []);
 

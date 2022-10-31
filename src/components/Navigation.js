@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom';
 const Navigation = props => {
     const { createAnotherPollHandler, getPolls } = useStore();
     const { isLoggedIn, loggedUser, setIsLoggedIn, setLoggedUser } = useLoginStore();
-    console.log(loggedUser);
 
     const history = useHistory();
 

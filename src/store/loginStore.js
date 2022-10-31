@@ -1,38 +1,20 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext } from "react";
 import { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from "../util/localStorageHook";
-import useStore from "./pollCreationStore";
 
 const AppContext = createContext();
 
 export function LoginStore(props) {
     const [isLoggedIn, setIsLoggedIn] = useLocalStorage('isLoggedIn', false);
     const [loggedUser, setLoggedUser] = useLocalStorage('loggedUser', {});
-    const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory();
-
-    async function getUsers() {
-        try {
-            const response = await fetch('https://polling-app-2bee2-default-rtdb.firebaseio.com/users.json');
-            const data = await response.json();
-            const userData = [];
-            for (let userId in data) {
-                userData.push(data[userId]);
-            }
-            setUsers(userData);
-        } catch (err) {
-            console.log(err);
-        }
-    }
 
     const loginHandler = async (event, username, password) => {
         event.preventDefault();
 
         if (username.trim() === '' || password.trim() === '') alert('All fields are required');
-
-        let successfulLogin = false;
 
         try {
             const response = await fetch(
@@ -51,67 +33,27 @@ export function LoginStore(props) {
 
             const data = await response.json();
 
-            console.log(data);
-            console.log(data.idToken)
-
             if (!response.ok) {
-                throw new Error('epa ne stava mbe')
+                throw new Error(data.error.message)
             }
 
             setLoggedUser({ username: username.substring(0, username.indexOf('@')), token: data.idToken });
             setIsLoggedIn(true);
-            successfulLogin = true;
-
         } catch (err) {
-            console.log(err.message);
+            return alert(err.message);
         }
-
-
-        // await getUsers();
-
-        // users.forEach(user => {
-        //     if (user.username === username && user.password === password) {
-        //         setLoggedUser({ id: user.id, username: user.username, role: user.role });
-        //         setIsLoggedIn(true);
-        //         successfulLogin = true;
-        //     }
-        // });
-
-        if (!successfulLogin) alert('Invalid credentials!');
     }
 
-    const registerHandler = async (event, username, password, repass) => {
+    const registerHandler = async (event, email, password, repass) => {
         event.preventDefault();
 
-        if (username.trim() === '' || password.trim() === '' || repass.trim() === '') {
+        if (email.trim() === '' || password.trim() === '' || repass.trim() === '') {
             return alert('All fields are required');
         }
-
-        // await getUsers();
-        // let userAlreadyExists = false;
-
-        // for (let user of users) {
-        //     if (user.username === username) {
-        //         userAlreadyExists = true;
-        //     }
-        // }
-
-        // if (userAlreadyExists) {
-        //     return alert(`${username} is already taken, please choose another username!`);
-        // }
 
         if (password !== repass) {
             return alert('Passwords don\'t match!');
         }
-
-        // setIsLoading(true);
-
-        // const newUser = {
-        //     id: Math.random().toString(),
-        //     username,
-        //     password,
-        //     role: 'user'
-        // }
 
         try {
             const response = await fetch(
@@ -122,37 +64,34 @@ export function LoginStore(props) {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: username,
+                        email: email,
                         password: password,
                         returnSecureToken: true,
                     }),
                 });
 
-            console.log(response);
             const data = await response.json();
-            console.log(data);
 
-            setIsLoggedIn(true);
-            setLoggedUser({ username: username.substring(0, username.indexOf('@')), token: data.idToken });
-            setIsLoading(false);
             if (!response.ok) {
-                throw new Error('epa ne stava mbe')
+                if (data.error.message === 'EMAIL_EXISTS') {
+                    throw new Error('This email has already been registered!');
+                } else {
+                    throw new Error('Couldn\'t finish registration. Please retry.');
+                }
             }
 
+            setIsLoggedIn(true);
+            setLoggedUser({ username: email.substring(0, email.indexOf('@')), token: data.idToken });
+            setIsLoading(false);
+            history.push('/polls');
         } catch (err) {
-            console.log(err.message);
+            return alert(err.message);
         }
-
-
-
-
-        history.push('/polls');
     };
 
     return (
         <AppContext.Provider
             value={{
-                users,
                 isLoggedIn,
                 setIsLoggedIn,
                 loggedUser,
@@ -161,7 +100,6 @@ export function LoginStore(props) {
                 setIsLoading,
                 loginHandler,
                 registerHandler,
-                getUsers
             }}
         >
             {props.children}
